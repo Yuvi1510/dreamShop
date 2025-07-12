@@ -13,7 +13,8 @@ public class ExceptionHandling {
 		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 	
-	public ResponseEntity<String> handleResourceAlreadyExistsExceptions(AlreadyExistsException ex){
-		return new ResponseEntity<>(ex.getMessage(),HttpStatus.CONFLICT);
+	@ExceptionHandler({AlreadyExistsException.class})
+	public ResponseEntity<ExceptionResponse> handleResourceAlreadyExistsExceptions(AlreadyExistsException ex){
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),HttpStatus.CONFLICT);
 	}
 }

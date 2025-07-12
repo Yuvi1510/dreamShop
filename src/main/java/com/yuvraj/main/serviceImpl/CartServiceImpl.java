@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yuvraj.main.models.Cart;
+import com.yuvraj.main.models.User;
 import com.yuvraj.main.repositories.CartItemRepository;
 import com.yuvraj.main.repositories.CartRepository;
 import com.yuvraj.main.services.CartService;
@@ -24,8 +25,9 @@ public class CartServiceImpl implements CartService {
 	
 	 
 	@Override
-	public CartDto makeCart() {
+	public CartDto makeCart(User user) {
 		Cart cart = new Cart();
+		cart.setUser(user);
 		cart.setTotalAmount(BigDecimal.ZERO);
 		Cart savedCart =  this.cartRepo.save(cart);
 		return this.modelMapper.map(savedCart, CartDto.class);
@@ -47,6 +49,12 @@ public class CartServiceImpl implements CartService {
 	public BigDecimal getTotalPrice(Long id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public CartDto getCartByUserId(Long userId) {
+		Cart cart = this.cartRepo.findByUserId(userId).orElseThrow(()-> new ResourceNotFoundException("Cart","user id", userId));
+		return this.modelMapper.map(cart, CartDto.class);
 	}
 
 	

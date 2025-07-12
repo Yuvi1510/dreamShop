@@ -17,9 +17,11 @@ import com.yuvraj.main.models.Cart;
 import com.yuvraj.main.models.Order;
 import com.yuvraj.main.models.OrderItem;
 import com.yuvraj.main.models.Product;
+import com.yuvraj.main.models.User;
 import com.yuvraj.main.repositories.CartRepository;
 import com.yuvraj.main.repositories.OrderRepository;
 import com.yuvraj.main.repositories.ProductRepository;
+import com.yuvraj.main.repositories.UserRepository;
 import com.yuvraj.main.services.OrderService;
 
 import jakarta.transaction.Transactional;
@@ -41,6 +43,9 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private UserRepository userRepo;
 
 	@Transactional
 	@Override
@@ -96,10 +101,16 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Override
 	public List<OrderDto> getUserOrders(Long userId){
-		return this.orderRepo.findbyUserId(userId)
-				.stream().map((order)->{
+		// checking if the user exists
+		this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","user id", userId));
+		// fetch the orders of user
+		List<Order> orders = this.orderRepo.findByUserId(userId);
+		// converting the list of Order to a list of OrderDto
+		List<OrderDto> ordersDto = orders.stream().map((order)->{
 					return this.modelMapper.map(order, OrderDto.class);
 				}).collect(Collectors.toList());
+		
+		return ordersDto;
 	}
 
 }

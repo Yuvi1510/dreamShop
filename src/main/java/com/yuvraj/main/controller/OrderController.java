@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yuvraj.main.dto.OrderDto;
@@ -24,7 +25,7 @@ public class OrderController {
 	
 	
 	@PostMapping("/order")
-	public ResponseEntity<ApiResponse> placeOrder(Long userId){
+	public ResponseEntity<ApiResponse> placeOrder(@RequestParam Long userId){
 		OrderDto order = this.orderService.placeOrder(userId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Order placed successfully!", order), HttpStatus.OK);
 	} 
@@ -37,8 +38,8 @@ public class OrderController {
 	}
 	
 	
-	@GetMapping("/order/user/{userId}")
-	public ResponseEntity<ApiResponse> getUserOrders(@PathVariable Long userId){
+	@GetMapping("/order")
+	public ResponseEntity<ApiResponse> getUserOrders(@RequestParam Long userId){
 		List<OrderDto> orders = this.orderService.getUserOrders(userId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Order fetched successfully",orders),HttpStatus.OK);
 	}

@@ -26,6 +26,11 @@ public class OrderItem {
 	private int quantity;
 	private BigDecimal price;
 	
+	// default constructor for model mapping
+	public OrderItem() {
+		
+	}
+	
 	public OrderItem(Order order, Product product, int quantity, BigDecimal price) {
 		this.order = order;
 		this.product = product;

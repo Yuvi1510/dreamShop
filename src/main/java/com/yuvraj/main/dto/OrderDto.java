@@ -7,13 +7,20 @@ import java.util.Set;
 import com.yuvraj.main.enums.OrderStatus;
 
 public class OrderDto {
-	
+	private Long orderId;
 	private LocalDate orderDate;
 	private BigDecimal totalAmount;
 	private OrderStatus orderStatus;
 	private Set<OrderItemDto> orderItems = new HashSet<>();
 	
 	
+	
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
 	public LocalDate getOrderDate() {
 		return orderDate;
 	}
