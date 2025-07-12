@@ -5,6 +5,10 @@ public class ResourceNotFoundException extends RuntimeException{
 		super(resource + " not found with "+ fieldName + ": "+fieldValue );
 	}
 	
+	public ResourceNotFoundException(String msg) {
+		super(msg );
+	}
+	
 	public ResourceNotFoundException(String resource, String fieldName, String fieldValue) {
 		super(resource + " not found with "+ fieldName + ": "+fieldValue);
 	}

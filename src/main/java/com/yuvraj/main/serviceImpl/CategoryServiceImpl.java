@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.yuvraj.main.exception.AlreadyExistsException;
 import com.yuvraj.main.exception.ResourceNotFoundException;
@@ -11,6 +12,8 @@ import com.yuvraj.main.models.Category;
 import com.yuvraj.main.repositories.CategoryRepository;
 import com.yuvraj.main.services.CategoryService;
 
+
+@Service
 public class CategoryServiceImpl implements CategoryService{
 	@Autowired
 	CategoryRepository categoryRepo;
@@ -34,7 +37,8 @@ public class CategoryServiceImpl implements CategoryService{
 	@Override
 	public Category updateCategory(Category category, Long id) {
 		Category existingCategory = this.categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category","id",id));
-		this.modelMapper.map(category, existingCategory);
+		
+		existingCategory.setName(category.getName());;
 		this.categoryRepo.save(existingCategory);
 		return existingCategory;
 	}

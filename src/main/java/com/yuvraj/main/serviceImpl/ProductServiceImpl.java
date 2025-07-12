@@ -1,10 +1,13 @@
 package com.yuvraj.main.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.yuvraj.main.dto.ProductDto;
 import com.yuvraj.main.exception.ResourceNotFoundException;
 import com.yuvraj.main.models.Category;
 import com.yuvraj.main.models.Product;
@@ -14,7 +17,7 @@ import com.yuvraj.main.request.AddProductRequest;
 import com.yuvraj.main.request.UpdateProductRequest;
 import com.yuvraj.main.services.ProductService;
 
-
+@Service
 public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductRepository productRepo;
@@ -26,7 +29,7 @@ public class ProductServiceImpl implements ProductService{
 	ModelMapper modelMapper;
 
 	@Override
-	public Product addProduct(AddProductRequest addProductRequest) {
+	public ProductDto addProduct(AddProductRequest addProductRequest) {
 		// check if the product is in the db
 		//if yes, save the product
 		// if not , save the category first
@@ -44,26 +47,28 @@ public class ProductServiceImpl implements ProductService{
 		product.setCategory(category);
 		Product savedProduct = this.productRepo.save(product);
 		
-		return savedProduct;
+		return this.modelMapper.map(savedProduct, ProductDto.class);
 	}
 
 	@Override
-	public Product getProductById(Long productId) {
+	public ProductDto getProductById(Long productId) {
 		Product product = this.productRepo.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
-		return product;
+		return this.modelMapper.map(product, ProductDto.class);
 	}
 
 	@Override
-	public Product updateProduct(UpdateProductRequest updateProductRequest, Long productId) {
+	public ProductDto updateProduct(UpdateProductRequest updateProductRequest, Long productId) {
 		// check if the product we want to update exists or not
 		Product product = this.productRepo.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
 		
 		// map the product from request to the existing product
 		this.modelMapper.map(updateProductRequest, product);
-		
+		// updateProductRequest does not have id so when we map, the product will not have the id 
+		// or else we need to send id in through updateProductRequest
+		product.setId(productId);
 		// save the product
 		Product savedProduct = this.productRepo.save(product);
-		return savedProduct;
+		return this.modelMapper.map(savedProduct, ProductDto.class);
 	}
 
 	@Override
@@ -73,33 +78,100 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public List<Product> getAllProducts() {
-		return this.productRepo.findAll();
+	public List<ProductDto> getAllProducts() { 
+		List<Product> products = this.productRepo.findAll();
+		List<ProductDto> productDtos = new ArrayList<>();
+		
+		if(products.isEmpty()) {
+			throw new ResourceNotFoundException("There is no products");
+		}else {
+			for(Product product: products) {
+				productDtos.add(this.modelMapper.map(product, ProductDto.class));
+			}
+			
+			return productDtos;
+		}
 	}
 
 	@Override
-	public List<Product> getProductsByCategory(String category) {
-		return this.productRepo.findByCategoryName(category);
+	public List<ProductDto> getProductsByCategory(String category) { 
+		List<Product> products = this.productRepo.findByCategoryName(category);
+List<ProductDto> productDtos = new ArrayList<>();
+		
+		if(products.isEmpty()) {
+			throw new ResourceNotFoundException("There is no products");
+		}else {
+			for(Product product: products) {
+				productDtos.add(this.modelMapper.map(product, ProductDto.class));
+			}
+			
+			return productDtos;
+		}
 	}
 
 	@Override
-	public List<Product> getProductsByBrand(String brand) {
-		return this.productRepo.findByBrand(brand);
+	public List<ProductDto> getProductsByBrand(String brand) {
+		List<Product> products =  this.productRepo.findByBrand(brand);
+List<ProductDto> productDtos = new ArrayList<>();
+		
+		if(products.isEmpty()) {
+			throw new ResourceNotFoundException("There is no products");
+		}else {
+			for(Product product: products) {
+				productDtos.add(this.modelMapper.map(product, ProductDto.class));
+			}
+			
+			return productDtos;
+		}
+		
 	}
 
 	@Override
-	public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-		return this.productRepo.findByCategoryNameAndBrand(category,brand);
+	public List<ProductDto> getProductsByCategoryAndBrand(String category, String brand) {
+		List<Product> products =  this.productRepo.findByCategoryNameAndBrand(category,brand);
+List<ProductDto> productDtos = new ArrayList<>();
+		
+		if(products.isEmpty()) {
+			throw new ResourceNotFoundException("There is no products");
+		}else {
+			for(Product product: products) {
+				productDtos.add(this.modelMapper.map(product, ProductDto.class));
+			}
+			
+			return productDtos;
+		}
 	}
 
 	@Override
-	public List<Product> getProductByName(String name) {
-		return this.productRepo.findByName(name); 
+	public List<ProductDto> getProductByName(String name) {
+		List<Product> products =  this.productRepo.findByName(name); 
+List<ProductDto> productDtos = new ArrayList<>();
+		
+		if(products.isEmpty()) {
+			throw new ResourceNotFoundException("There is no products");
+		}else {
+			for(Product product: products) {
+				productDtos.add(this.modelMapper.map(product, ProductDto.class));
+			}
+			
+			return productDtos;
+		}
 	}
 
 	@Override
-	public List<Product> getProductsByBrandAndName(String brand, String name) {
-		return this.productRepo.findByBrandAndName(brand, name);
+	public List<ProductDto> getProductsByBrandAndName(String brand, String name) {
+		List<Product> products =  this.productRepo.findByBrandAndName(brand, name);
+List<ProductDto> productDtos = new ArrayList<>();
+		
+		if(products.isEmpty()) {
+			throw new ResourceNotFoundException("There is no products");
+		}else {
+			for(Product product: products) {
+				productDtos.add(this.modelMapper.map(product, ProductDto.class));
+			}
+			
+			return productDtos;
+		}
 	}
 	
 	@Override

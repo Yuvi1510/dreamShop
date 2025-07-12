@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandling {
 	
 	@ExceptionHandler({ResourceNotFoundException.class})
-	public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex){
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+	public ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ResourceNotFoundException ex){
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 	
 	public ResponseEntity<String> handleResourceAlreadyExistsExceptions(AlreadyExistsException ex){
