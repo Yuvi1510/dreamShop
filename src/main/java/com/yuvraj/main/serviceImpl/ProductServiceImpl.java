@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yuvraj.main.dto.ProductDto;
+import com.yuvraj.main.exception.AlreadyExistsException;
 import com.yuvraj.main.exception.ResourceNotFoundException;
 import com.yuvraj.main.models.Category;
 import com.yuvraj.main.models.Product;
@@ -34,6 +35,9 @@ public class ProductServiceImpl implements ProductService{
 		//if yes, save the product
 		// if not , save the category first
 		// then save the product
+		if(this.productExists(addProductRequest.getName(), addProductRequest.getBrand())) {
+			throw new AlreadyExistsException(addProductRequest.getBrand() + " " + addProductRequest.getName()   + " already exists");
+		}
 		Category category = this.categoryRepo.findByName(addProductRequest.getCategory().getName());
 		if(category == null) {
 			category = this.categoryRepo.save(new Category(addProductRequest.getCategory().getName()));
@@ -48,6 +52,11 @@ public class ProductServiceImpl implements ProductService{
 		Product savedProduct = this.productRepo.save(product);
 		
 		return this.modelMapper.map(savedProduct, ProductDto.class);
+	}
+	
+	
+	private boolean productExists(String name, String brand) {
+		return this.productRepo.existsByNameAndBrand(name, brand);
 	}
 
 	@Override

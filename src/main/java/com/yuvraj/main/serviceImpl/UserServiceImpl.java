@@ -5,6 +5,8 @@ import com.yuvraj.main.models.Cart;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.yuvraj.main.dto.CartDto;
@@ -72,6 +74,13 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(Long userId) {
 		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","user id",userId));
 		this.userRepo.delete(user);
+	}
+
+	@Override
+	public User getAuthenticatedUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		return this.userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User","email",email));
 	}
 
 }

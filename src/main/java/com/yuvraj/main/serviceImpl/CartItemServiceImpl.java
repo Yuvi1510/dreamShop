@@ -64,6 +64,7 @@ public class CartItemServiceImpl implements CartItemService{
 		CartItem itemToRemove = getCartItem( cartId,  productId);
 		
 		cart.removeItem(itemToRemove);
+		this.cartItemRepo.delete(itemToRemove);
 		this.cartRepo.save(cart);
 	}
 

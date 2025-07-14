@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService{
 		order.setTotalAmount(calculateTotalAmount(orderItems));	
 		Order placedOrder = this.orderRepo.save(order);
 		
-		cartService.clearCart(cart.getId());
+		this.cartService.clearCart(cart.getId());
 		
 		return this.modelMapper.map(placedOrder, OrderDto.class);
 	}
@@ -74,11 +74,16 @@ public class OrderServiceImpl implements OrderService{
 	 
 	
 	private List<OrderItem> createOrderItems(Order order, Cart cart){
+		if(cart.getItems().isEmpty()) {
+			throw new ResourceNotFoundException("Cart item","cart id", cart.getId());
+		}
 		return cart.getItems().stream().map((cartItem)->{
 			Product product = cartItem.getProduct();
+			if(product.getInventory() <= 0 ) {
+				throw new ResourceNotFoundException(product.getName()+" is out of stock");
+			}
 			product.setInventory(product.getInventory() - cartItem.getQuantity());
 			this.productRepo.save(product);
-			
 			return new OrderItem(order, product, cartItem.getQuantity(), cartItem.getUnitPrice());
 		}).collect(Collectors.toList()); 
 	}

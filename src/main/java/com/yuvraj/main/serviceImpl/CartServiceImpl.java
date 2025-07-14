@@ -20,7 +20,13 @@ public class CartServiceImpl implements CartService {
 	private CartRepository cartRepo;
 	
 	@Autowired
+	private CartItemRepository cartItemRepo;
+	
+	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private CartItemServiceImpl cartItemService;
 	
 	
 	 
@@ -42,7 +48,9 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void clearCart(Long id) {
 		Cart cart = this.cartRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Cart","id",id));
-		this.cartRepo.delete(cart);
+		cart.getItems().forEach((item)->{
+			this.cartItemService.removeItemFromCart(cart.getId(), item.getProduct().getId());
+		});
 	}
 
 	@Override
