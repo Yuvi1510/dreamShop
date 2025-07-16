@@ -9,8 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class CartItem {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,54 +31,12 @@ public class CartItem {
 	@JoinColumn(name="cart_id")
 	private Cart cart;
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public BigDecimal getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(BigDecimal unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
-	public BigDecimal getTotalPrice() {
-		return totalPrice;
-	}
-
+	
 	public void setTotalPrice() {
 //		this.totalPrice = totalPrice;
 		this.totalPrice = this.unitPrice.multiply(new BigDecimal(quantity));
 	}
 
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
 	
 	
 	

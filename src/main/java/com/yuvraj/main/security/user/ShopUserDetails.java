@@ -1,4 +1,4 @@
-package security.user;
+package com.yuvraj.main.security.user;
 
 import java.util.Collection;
 import java.util.List;

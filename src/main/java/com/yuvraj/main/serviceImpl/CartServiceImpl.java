@@ -19,8 +19,7 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private CartRepository cartRepo;
 	
-	@Autowired
-	private CartItemRepository cartItemRepo;
+
 	
 	@Autowired
 	private ModelMapper modelMapper;

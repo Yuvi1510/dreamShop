@@ -1,4 +1,4 @@
-package security.jwt;
+package com.yuvraj.main.security.jwt;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.yuvraj.main.security.user.ShopUserDetails;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import security.user.ShopUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.MalformedJwtException;

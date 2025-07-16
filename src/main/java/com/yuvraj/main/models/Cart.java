@@ -12,8 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Cart {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -50,34 +54,10 @@ public class Cart {
 	}
 	
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public BigDecimal getTotalAmount() {
 		updateTotalAmount();
 		return totalAmount;
 	}
-	public void setTotalAmount(BigDecimal totalAmount) {
-		this.totalAmount = totalAmount;
-	}
-	public Set<CartItem> getItems() {
-		return this.items;
-	}
-	public void setItems(Set<CartItem> items) {
-		this.items = items;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
 	
 	
 }

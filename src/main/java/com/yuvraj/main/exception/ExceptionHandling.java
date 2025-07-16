@@ -17,4 +17,9 @@ public class ExceptionHandling {
 	public ResponseEntity<ExceptionResponse> handleResourceAlreadyExistsExceptions(AlreadyExistsException ex){
 		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),HttpStatus.CONFLICT);
 	}
+	
+	@ExceptionHandler({InvalidCredentialsException.class})
+	public ResponseEntity<ExceptionResponse> handleInvalidCredentialsExceptions(InvalidCredentialsException ex){
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),HttpStatus.UNAUTHORIZED);
+	}
 }

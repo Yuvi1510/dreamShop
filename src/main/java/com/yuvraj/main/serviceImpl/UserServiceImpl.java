@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.yuvraj.main.dto.CartDto;
@@ -14,6 +15,7 @@ import com.yuvraj.main.dto.UserDto;
 import com.yuvraj.main.exception.AlreadyExistsException;
 import com.yuvraj.main.exception.ResourceNotFoundException;
 import com.yuvraj.main.models.User;
+import com.yuvraj.main.repositories.RoleRepository;
 import com.yuvraj.main.repositories.UserRepository;
 import com.yuvraj.main.request.CreateUserRequest;
 import com.yuvraj.main.request.UpdateUserRequest;
@@ -32,6 +34,11 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private CartServiceImpl cartService;
 	
+	@Autowired
+	private RoleRepository roleRepo;
+	
+	@Autowired
+	PasswordEncoder encoder;
 	
 	@Override
 	public UserDto  createUser(CreateUserRequest request) {
@@ -43,6 +50,7 @@ public class UserServiceImpl implements UserService {
 		User savedUser =  Optional.of(request).filter(user -> !this.userRepo.existsByEmail(request.getEmail()))
 				.map(req ->{
 					User user = this.modelMapper.map(request, User.class);
+					user.setPassword(encoder.encode(user.getPassword()));
 					this.userRepo.save(user);
 					return user;
 				}).orElseThrow(()-> new AlreadyExistsException("User","email",request.getEmail()));

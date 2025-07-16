@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class ProductController {
 	private ProductServiceImpl productService;
 	
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("")
 	public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest productRequest){
 		
@@ -53,6 +55,7 @@ public class ProductController {
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Fetched product with id"+id, product), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> updateProduct(@RequestBody UpdateProductRequest productRequest, @PathVariable Long id){
 		ProductDto updatedProduct = this.productService.updateProduct(productRequest, id);
