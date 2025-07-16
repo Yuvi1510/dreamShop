@@ -2,6 +2,7 @@ package com.yuvraj.main.serviceImpl;
 
 import java.util.Optional;
 import com.yuvraj.main.models.Cart;
+import com.yuvraj.main.models.Role;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class UserServiceImpl implements UserService {
 		User savedUser =  Optional.of(request).filter(user -> !this.userRepo.existsByEmail(request.getEmail()))
 				.map(req ->{
 					User user = this.modelMapper.map(request, User.class);
+					Role role = this.roleRepo.findByName("ROLE_USER");
+					user.getRoles().add(role);
 					user.setPassword(encoder.encode(user.getPassword()));
 					this.userRepo.save(user);
 					return user;
